@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БИЛЕТЫ | LUGENSYFEST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="Без имени-2.png">
+    <style>
+        :root {
+            --acid-green: #39ff14;
+            --dark-bg: #0b0c10;
+        }
+        body {
+            background-color: var(--dark-bg);
+            color: var(--acid-green);
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .back-link {
+            align-self: flex-start;
+            color: var(--acid-green);
+            text-decoration: none;
+            margin-bottom: 20px;
+            border: 1px solid var(--acid-green);
+            padding: 5px 15px;
+            transition: 0.3s;
+        }
+        .back-link:hover {
+            background: var(--acid-green);
+            color: var(--dark-bg);
+        }
+        /* Эффект CRT монитора */
+        .crt::before {
+            content: " "; display: block; position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            z-index: 10;
+        }
+    </style>
+<!-- Top.Mail.Ru counter -->
+<script type="text/javascript">
+var _tmr = window._tmr || (window._tmr = []);
+_tmr.push({id: "3771625", type: "pageView", start: (new Date()).getTime()});
+(function (d, w, id) {
+  if (d.getElementById(id)) return;
+  var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+  ts.src = "https://top-fwz1.mail.ru/js/code.js";
+  var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+  if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+})(document, window, "tmr-code");
+</script>
+<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3771625;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
+<!-- /Top.Mail.Ru counter -->
+</head>
+<body class="crt">
+    <a href="index.html" class="back-link">< НАЗАД</a>
+    
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 30px;">ARE YOU IN?</h1>
+        
+        <div id="tc-widget-container"
+            data-tc-event-inline="69fb4454e344007b739b073d" 
+            data-tc-token="eyJhbGciOiJIUzI1NiIsImlzcyI6InRpY2tldHNjbG91ZC5ydSIsInR5cCI6IkpXVCJ9.eyJwIjoiNjlkZWIwNDgxY2I5NTJlNjUwZDgzM2ZhIn0.W35r5R-L71jOWArTPXKndmjf3UV1frm-BfrvPIEZLIY">
+            Инициализация защищенного соединения...
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const widgetScript = document.createElement("script");
+            widgetScript.src = "https://ticketscloud.com/static/scripts/widget/tcwidget.js";
+            widgetScript.async = true;
+            
+            // Заглушка на случай, если скрипт не сможет загрузиться (например, блокировщик рекламы)
+            widgetScript.onerror = function() {
+                document.getElementById('tc-widget-container').innerText = "Ошибка загрузки виджета билетов. Пожалуйста, отключите AdBlock или обновите страницу.";
+            };
+
+            document.body.appendChild(widgetScript);
+        });
+    </script>
+</body>
+</html>
+    <script src="https://ticketscloud.com/static/scripts/widget/tcwidget.js"></script>
+</body>
+</html>
