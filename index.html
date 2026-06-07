@@ -7,18 +7,18 @@
     
     <link rel="icon" type="image/png" href="Без имени-2.png">
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' https://ticketscloud.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://ticketscloud.com;">
+    <!-- ОБНОВЛЕННЫЙ CONTENT SECURITY POLICY: Разрешаем работу Яндекс Метрики и Пикселя VK -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru;">
     
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* Добавляем белую обводку для фавикона, если браузер его рендерит на странице, 
-   но для реальной вкладки лучше обновить сам файл. */
-link[rel="icon"] {
-    filter: drop-shadow(1px 0 0 #fff) 
-            drop-shadow(-1px 0 0 #fff) 
-            drop-shadow(0 1px 0 #fff) 
-            drop-shadow(0 -1px 0 #fff);
-}
+        /* Добавляем белую обводку для фавикона, если браузер его рендерит на странице */
+        link[rel="icon"] {
+            filter: drop-shadow(1px 0 0 #fff) 
+                    drop-shadow(-1px 0 0 #fff) 
+                    drop-shadow(0 1px 0 #fff) 
+                    drop-shadow(0 -1px 0 #fff);
+        }
         :root {
             --acid-green: #39ff14;
             --dark-bg: #08090a;
@@ -127,7 +127,6 @@ link[rel="icon"] {
             background: var(--acid-green);
         }
 
-        /* Умный размер заголовка: не больше 4.5rem на ПК и автоматически сжимается на мобилках */
         .hero-title { 
             font-size: clamp(2rem, 7vw, 4.5rem); 
             color: var(--light-text); 
@@ -267,7 +266,6 @@ link[rel="icon"] {
             border: 1px solid var(--gray-border); overflow: hidden; 
         }
         
-        /* Изолируем картинки для видеокарты */
         .artist-img-placeholder img { 
             width: 100%; 
             height: 100%; 
@@ -325,7 +323,6 @@ link[rel="icon"] {
             filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
         }
 
-        /* --- ОБНОВЛЕННЫЙ АДАПТИВ СТИЛЕЙ --- */
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: left; padding: 2rem 5%; gap: 2rem; }
             .hero-text { max-width: 100%; padding: 2rem 1.5rem; } 
@@ -341,33 +338,35 @@ link[rel="icon"] {
             .footer-content { flex-direction: column; gap: 15px; text-align: center; }
         }
     </style>
+    
     <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109698134', 'ym');
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109698134', 'ym');
 
-    ym(109698134, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/109698134" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-<!-- Top.Mail.Ru counter -->
-<script type="text/javascript">
-var _tmr = window._tmr || (window._tmr = []);
-_tmr.push({id: "3771625", type: "pageView", start: (new Date()).getTime()});
-(function (d, w, id) {
-  if (d.getElementById(id)) return;
-  var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-  ts.src = "https://top-fwz1.mail.ru/js/code.js";
-  var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
-  if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-})(document, window, "tmr-code");
-</script>
-<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3771625;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-<!-- /Top.Mail.Ru counter -->
+        ym(109698134, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/109698134" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+    <!-- Top.Mail.Ru counter -->
+    <script type="text/javascript">
+    var _tmr = window._tmr || (window._tmr = []);
+    _tmr.push({id: "3771625", type: "pageView", start: (new Date()).getTime()});
+    (function (d, w, id) {
+      if (d.getElementById(id)) return;
+      var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+      ts.src = "https://top-fwz1.mail.ru/js/code.js";
+      var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+      if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+    })(document, window, "tmr-code");
+    </script>
+    <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3771625;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
+    <!-- /Top.Mail.Ru counter -->
 </head>
 <body class="crt">
 
