@@ -19,7 +19,6 @@
             --gray-border: rgba(57, 255, 20, 0.15);
             --gray-text: #8e94a0;
             --light-text: #e0e0e0;
-            --aberration: 2px 0px 0px rgba(255,0,0,0.5), -2px 0px 0px rgba(0,255,255,0.5);
             --hud-accent: rgba(57, 255, 20, 0.5);
         }
 
@@ -40,7 +39,7 @@
             overflow-x: hidden;
         }
 
-        /* === ФОНОВЫЕ ЭФФЕКТЫ ТЕРМИНАЛА === */
+        /* === ФОНОВЫЕ ЭФФЕКТЫ === */
         .noise-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: -1; opacity: 0.04;
@@ -131,7 +130,6 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(57, 255, 20, 0.05);
         }
 
-        /* HUD Уголки для контейнера */
         .hud-corners {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             pointer-events: none; z-index: 20;
@@ -152,14 +150,15 @@
             text-align: center;
             margin-bottom: 40px;
             color: var(--light-text);
-            text-shadow: var(--aberration);
+            /* Радуга убрана, добавлен легкий свечащийся эффект */
+            text-shadow: 0 0 10px rgba(255,255,255,0.2); 
             text-transform: uppercase;
             font-size: 2.5rem;
             letter-spacing: -1px;
         }
 
         #tc-widget-container {
-            min-height: 400px; /* Чтобы контейнер не схлопывался до загрузки виджета */
+            min-height: 400px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -181,10 +180,10 @@
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
         })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109698134', 'ym');
-
         ym(109698134, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109698134" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    
     <script type="text/javascript">
     var _tmr = window._tmr || (window._tmr = []);
     _tmr.push({id: "3771625", type: "pageView", start: (new Date()).getTime()});
@@ -197,7 +196,7 @@
     })(document, window, "tmr-code");
     </script>
     <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3771625;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-    </head>
+</head>
 <body>
     
     <div class="noise-overlay"></div>
@@ -227,7 +226,6 @@
             widgetScript.src = "https://ticketscloud.com/static/scripts/widget/tcwidget.js";
             widgetScript.async = true;
             
-            // Заглушка на случай блокировщиков
             widgetScript.onerror = function() {
                 document.getElementById('tc-widget-container').innerHTML = "<span style='color: #ff3333;'>[ ОШИБКА ДОСТУПА. ОТКЛЮЧИТЕ ADBLOCK ИЛИ ОБНОВИТЕ СОЕДИНЕНИЕ ]</span>";
             };
