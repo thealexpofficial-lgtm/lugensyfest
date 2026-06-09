@@ -3,41 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUGENSYFEST</title>
+    <title>LUGENSYFEST | Самый хаотичный фестиваль лета</title>
     
     <link rel="icon" type="image/png" href="Без имени-2.png">
     
-    <!-- ОБНОВЛЕННЫЙ CONTENT SECURITY POLICY: Разрешаем работу Яндекс Метрики и Пикселя VK -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://ticketscloud.com https://mc.yandex.ru https://top-fwz1.mail.ru https://band.link; media-src 'self' blob: data:;">
     
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* Добавляем белую обводку для фавикона, если браузер его рендерит на странице */
-        link[rel="icon"] {
-            filter: drop-shadow(1px 0 0 #fff) 
-                    drop-shadow(-1px 0 0 #fff) 
-                    drop-shadow(0 1px 0 #fff) 
-                    drop-shadow(0 -1px 0 #fff);
-        }
         :root {
             --acid-green: #39ff14;
-            --dark-bg: #08090a;
-            --panel-bg: #111215;
-            --gray-border: #24262b;
+            --acid-glow: 0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3);
+            --dark-bg: #020202;
+            --panel-bg: rgba(5, 6, 8, 0.65);
+            --gray-border: rgba(57, 255, 20, 0.15); /* Бордеры теперь слегка зеленые */
             --gray-text: #8e94a0;
-            --light-text: #ffffff;
+            --light-text: #e0e0e0;
+            /* Эффект хроматической аберрации (RGB раздвоение) */
+            --aberration: 2px 0px 0px rgba(255,0,0,0.5), -2px 0px 0px rgba(0,255,255,0.5);
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .hero-title, .section-title, .buy-btn, .footer-content, .card-index {
+        /* Глобальное раздвоение каналов на заголовках */
+        .hero-title, .section-title, .artist-name, #modalName {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
+            text-shadow: var(--aberration);
         }
 
         body {
@@ -47,294 +43,215 @@
             position: relative;
         }
 
+        /* === 1. ВИДЕО ФОН (Еще темнее и контрастнее) === */
+        .video-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -5; overflow: hidden; background-color: var(--dark-bg);
+        }
+        .video-bg {
+            position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
+            transform: translate(-50%, -50%); object-fit: cover;
+            filter: grayscale(100%) contrast(1.5) brightness(0.4);
+            pointer-events: none;
+        }
+
+        /* === 2. ДВИЖУЩИЕСЯ СКАНЛАЙНЫ И ПИКСЕЛЬНАЯ СЕТКА === */
         .grid-overlay {
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
+            position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background-image: 
-                linear-gradient(rgba(36, 38, 43, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(36, 38, 43, 0.3) 1px, transparent 1px);
-            background-size: 80px 80px;
-            z-index: -2;
-            pointer-events: none;
+                linear-gradient(rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -4; pointer-events: none;
         }
 
-        .crt::before {
-            content: " "; display: block; position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-            z-index: 999; 
-            background-size: 100% 4px; 
-            pointer-events: none;
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 9997; pointer-events: none;
+            animation: scanline-scroll 10s linear infinite;
         }
 
-        .chaotic-lines-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.85; 
+        @keyframes scanline-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100vh; }
         }
 
-        .chaotic-lines-bg svg {
-            width: 100%;
-            height: 100%;
+        /* === 3. ВИНЬЕТКА CRT МОНИТОРА (Темные края) === */
+        .crt-vignette {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+            z-index: 9998; pointer-events: none;
         }
 
+        /* === 4. ЭФФЕКТ МЕРЦАНИЯ ЭКРАНА (Глитч) === */
+        .screen-flicker {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(57, 255, 20, 0.02);
+            z-index: 9999; pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; } 50% { opacity: 1; } 100% { opacity: 0.95; }
+        }
+
+        /* --- ХЕРО-БЛОК --- */
         .hero { 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            border-bottom: 1px solid var(--gray-border); 
-            padding: 4rem 5%; 
-            gap: 4rem;
-            position: relative;
-            overflow: hidden;
+            min-height: 100vh; display: flex; align-items: center; justify-content: space-between; 
+            padding: 4rem 5%; gap: 4rem; position: relative; border-bottom: 1px solid var(--gray-border);
         }
 
         .hero-text { 
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            max-width: 55%;
-            padding: 3rem; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: rgba(8, 9, 10, 0.95); 
-            border: 1px solid var(--gray-border);
+            position: relative; z-index: 10; flex: 1; max-width: 55%; padding: 4rem; 
+            display: flex; flex-direction: column; justify-content: center;
+            background: var(--panel-bg); border: 1px solid var(--gray-border);
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(57, 255, 20, 0.05);
         }
 
         .hero-meta {
-            font-size: 0.75rem;
-            color: var(--acid-green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 0.8rem; color: var(--acid-green); text-transform: uppercase; letter-spacing: 3px;
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px;
+            text-shadow: var(--acid-glow);
         }
 
         .hero-meta::before {
-            content: "";
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: var(--acid-green);
+            content: ""; display: inline-block; width: 8px; height: 8px; background: var(--acid-green);
+            box-shadow: var(--acid-glow);
         }
 
         .hero-title { 
-            font-size: clamp(2rem, 7vw, 4.5rem); 
-            color: var(--light-text); 
-            line-height: 0.95;
-            margin-bottom: 2rem; 
-            text-transform: uppercase; 
-            letter-spacing: -1px;
-            word-wrap: break-word;
+            font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--light-text); 
+            line-height: 1; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: -1px;
         }
 
         .hero-desc { 
-            font-size: 1.1rem; 
-            line-height: 1.6; 
-            margin-bottom: 3rem; 
-            color: var(--gray-text);
+            font-size: 1.1rem; line-height: 1.8; margin-bottom: 3rem; color: #a1a1aa;
+        }
+        
+        .hero-desc strong {
+            color: #ffffff; font-size: 1.3rem; display: block; margin-bottom: 15px;
+            border-left: 2px solid var(--acid-green); padding-left: 15px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
 
+        /* Кнопка с эффектом жесткого фосфора */
+        .buy-wrapper { display: flex; flex-direction: column; gap: 12px; }
+
         .buy-btn {
-            background-color: var(--acid-green); 
-            color: #000000;
-            border: none; 
-            padding: 20px 40px;
-            font-size: 1.2rem; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            width: fit-content;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
+            background-color: var(--acid-green); color: #000; border: none; 
+            padding: 20px 40px; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1px; display: inline-flex; align-items: center; justify-content: space-between;
+            gap: 20px; width: fit-content; text-decoration: none; font-weight: 900;
+            box-shadow: var(--acid-glow); transition: all 0.2s ease;
         }
 
         .buy-btn:hover { 
-            background-color: var(--light-text); 
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+            background-color: #ffffff; color: #000;
+            box-shadow: 0 0 20px #ffffff, 0 0 40px var(--acid-green);
+            transform: scale(1.02);
         }
+        
+        .price-note { font-size: 0.75rem; color: var(--acid-green); text-transform: uppercase; letter-spacing: 1px; text-shadow: var(--acid-glow); }
 
+        /* ПОСТЕР */
         .hero-image-container {
-            position: relative;
-            z-index: 1;
-            flex: 0 0 35%;
-            max-width: 35%;
-            background: var(--panel-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            border: 1px solid var(--gray-border);
-            margin-right: 0; 
-        }
-
-        .hero-image-container::before {
-            content: "AXIS-POSTER // SYS_REF_02";
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            font-size: 0.65rem;
-            color: var(--gray-text);
-            letter-spacing: 1px;
+            position: relative; z-index: 10; flex: 0 0 38%; max-width: 38%;
+            background: var(--panel-bg); padding: 1.5rem; border: 1px solid var(--gray-border);
+            backdrop-filter: blur(8px); box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
 
         .hero-image-container img {
-            width: 100%;
-            height: auto;
-            max-height: 70vh;
-            object-fit: contain;
-            border: 1px solid var(--gray-border);
-            filter: grayscale(100%);
+            width: 100%; height: auto; max-height: 75vh; object-fit: contain;
+            filter: grayscale(100%) contrast(1.2); mix-blend-mode: screen;
         }
 
-        .lineup { 
-            border-bottom: 1px solid var(--gray-border);
-            background: var(--dark-bg);
-            padding: 4rem 5%;
-        }
+        /* --- СЕТКА ЛАЙН-АПА --- */
+        .lineup { padding: 6rem 5%; position: relative; z-index: 2; }
 
         .lineup-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2rem;
-            border: 1px solid var(--gray-border);
-            background: var(--panel-bg);
-            margin-bottom: 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 2rem; border: 1px solid var(--gray-border); background: var(--panel-bg);
+            backdrop-filter: blur(8px); margin-bottom: 4rem;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
 
-        .section-title { 
-            font-size: 2rem; 
-            color: var(--light-text); 
-            text-transform: uppercase; 
-        }
+        .section-title { font-size: 2rem; color: var(--light-text); text-transform: uppercase; }
+        .section-meta { font-size: 0.85rem; color: var(--acid-green); letter-spacing: 2px; text-shadow: var(--acid-glow); }
 
-        .section-meta {
-            font-size: 0.75rem;
-            color: var(--gray-text);
-        }
-
-        .roster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            overflow-x: visible;
-        }
+        .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2.5rem; }
 
         .artist-card {
-            background: var(--panel-bg); 
-            border: 1px solid var(--gray-border);
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            background: var(--panel-bg); border: 1px solid var(--gray-border); padding: 1.5rem;
+            transition: all 0.2s ease; backdrop-filter: blur(8px); display: flex; flex-direction: column; gap: 1rem;
+            cursor: pointer; position: relative;
         }
 
         .artist-card:hover { 
-            background-color: #16181d;
-            border-color: var(--acid-green);
+            border-color: var(--acid-green); box-shadow: inset 0 0 15px rgba(57,255,20,0.1), 0 0 20px rgba(57,255,20,0.2);
+            transform: translateY(-5px);
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .card-index { font-size: 0.75rem; color: var(--gray-text); letter-spacing: 1px; }
+        
+        .card-status-dot { 
+            width: 8px; height: 8px; background: transparent; border: 1px solid var(--gray-text);
+            border-radius: 0; transition: all 0.2s ease; 
         }
-
-        .card-index { font-size: 0.85rem; color: var(--gray-text); }
-        .card-status-dot { width: 6px; height: 6px; background: var(--gray-border); transition: background-color 0.2s ease; }
-        .artist-card:hover .card-status-dot { background: var(--acid-green); }
+        .artist-card:hover .card-status-dot { background: var(--acid-green); border-color: var(--acid-green); box-shadow: var(--acid-glow); }
 
         .artist-img-placeholder { 
-            width: 100%; height: 300px; background: var(--dark-bg); 
-            border: 1px solid var(--gray-border); overflow: hidden; 
+            width: 100%; height: 320px; background: #000; overflow: hidden; position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .artist-img-placeholder img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            filter: grayscale(100%); 
-            display: block;
-            transform: translateZ(0);
-            backface-visibility: hidden; 
+            width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2); 
+            transition: transform 0.4s ease, filter 0.4s ease; mix-blend-mode: screen;
         }
-        
-        .card-footer { margin-top: 1.5rem; text-align: left; }
-        .artist-name { font-size: 1.3rem; color: var(--light-text); text-transform: uppercase; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.25rem; }
-        .artist-role { font-size: 0.75rem; color: var(--gray-text); text-transform: uppercase; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 9, 10, 0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: var(--panel-bg); border: 1px solid var(--gray-border); padding: 3rem; max-width: 700px; width: 90%; position: relative; display: flex; gap: 2.5rem; }
-        .close-btn { position: absolute; top: 15px; right: 20px; color: var(--gray-text); font-size: 2rem; cursor: pointer; }
-        .close-btn:hover { color: var(--light-text); }
-        .modal-img { width: 240px; height: 280px; border: 1px solid var(--gray-border); object-fit: cover; filter: grayscale(100%); }
+        .artist-card:hover .artist-img-placeholder img { transform: scale(1.05); filter: grayscale(0%) contrast(1.1); }
+
+        .card-footer { margin-top: 0.5rem; }
+        .artist-name { font-size: 1.4rem; color: var(--light-text); text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 0.25rem; }
+        .artist-role { font-size: 0.75rem; color: var(--acid-green); text-transform: uppercase; letter-spacing: 1px; text-shadow: var(--acid-glow); }
+
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .modal-content { background: var(--dark-bg); border: 1px solid var(--acid-green); padding: 3rem; max-width: 750px; width: 90%; position: relative; display: flex; gap: 2.5rem; box-shadow: var(--acid-glow); }
+        .close-btn { position: absolute; top: 15px; right: 25px; color: var(--acid-green); font-size: 2rem; cursor: pointer; transition: color 0.2s; text-shadow: var(--acid-glow); }
+        .close-btn:hover { color: #fff; }
+        .modal-img { width: 240px; height: 320px; object-fit: cover; filter: grayscale(100%); border: 1px solid rgba(255,255,255,0.1); }
         .modal-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        #modalName { font-size: 2rem; color: var(--light-text); margin-bottom: 0.5rem; text-transform: uppercase; }
-        #modalDesc { font-size: 0.85rem; line-height: 1.6; color: var(--gray-text); margin-bottom: 2rem; }
-        .social-links a { display: inline-block; margin-right: 10px; color: #000000; background: var(--acid-green); padding: 8px 20px; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
+        #modalName { font-size: 2.5rem; color: var(--light-text); margin-bottom: 1rem; text-transform: uppercase; }
+        #modalDesc { font-size: 0.95rem; line-height: 1.6; color: #d1d5db; margin-bottom: 2rem; }
+        #modalDesc strong { color: var(--acid-green); text-shadow: var(--acid-glow); }
+        .social-links a { display: inline-block; margin-right: 10px; color: #000; background: var(--acid-green); padding: 12px 25px; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; box-shadow: var(--acid-glow); transition: all 0.2s; }
+        .social-links a:hover { background: #fff; box-shadow: 0 0 20px #fff; }
 
-        .footer-terminal {
-            background-color: var(--dark-bg);
-            border-top: 1px solid var(--gray-border);
-            padding: 20px 5%;
-            position: relative;
-            z-index: 10;
-        }
+        .footer-terminal { background-color: #000; border-top: 1px solid var(--gray-border); padding: 2rem 5%; position: relative; z-index: 10; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .footer-left .age-limit { border: 1px solid var(--gray-text); padding: 5px 10px; font-size: 0.8rem; letter-spacing: 1px;}
+        .footer-center { font-size: 0.75rem; color: var(--gray-text); letter-spacing: 2px; text-transform: uppercase; }
+        .footer-right .footer-logo { width: 50px; height: auto; filter: grayscale(100%); opacity: 0.5; }
 
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .footer-left .age-limit {
-            border: 1px solid var(--gray-text);
-            padding: 5px 10px;
-            font-size: 0.9rem;
-        }
-
-        .footer-center {
-            font-size: 0.85rem;
-            color: var(--gray-text);
-            letter-spacing: 1px;
-        }
-
-        .footer-right .footer-logo {
-            width: 60px; 
-            height: auto;
-            filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
-        }
-
+        /* --- АДАПТАЦИЯ --- */
         @media (max-width: 1024px) {
-            .hero { flex-direction: column; text-align: left; padding: 2rem 5%; gap: 2rem; }
-            .hero-text { max-width: 100%; padding: 2rem 1.5rem; } 
-            .hero-image-container { max-width: 100%; width: 100%; }
-            .hud-corner-logo { display: none; }
+            .hero { flex-direction: column; text-align: left; padding: 6rem 5% 3rem; gap: 2rem; }
+            .hero-text { max-width: 100%; padding: 2.5rem; } 
+            .hero-image-container { max-width: 100%; width: 100%; padding: 1rem; }
         }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 2.2rem; } 
-            .hero-desc { font-size: 0.95rem; margin-bottom: 2rem; }
-            .modal-content { flex-direction: column; padding: 2rem; }
-            .modal-img { width: 100%; height: 220px; }
+            .hero-desc { font-size: 1rem; }
+            .section-title { font-size: 1.5rem; }
+            .modal-content { flex-direction: column; padding: 2rem; gap: 1.5rem; max-height: 90vh; overflow-y: auto; }
+            .modal-img { width: 100%; height: 250px; }
             .footer-content { flex-direction: column; gap: 15px; text-align: center; }
         }
     </style>
@@ -347,12 +264,10 @@
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
         })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109698134', 'ym');
-
         ym(109698134, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109698134" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-
+    
     <!-- Top.Mail.Ru counter -->
     <script type="text/javascript">
     var _tmr = window._tmr || (window._tmr = []);
@@ -366,51 +281,39 @@
     })(document, window, "tmr-code");
     </script>
     <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3771625;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-    <!-- /Top.Mail.Ru counter -->
 </head>
-<body class="crt">
+<body>
 
-    <div class="fixed-bg"></div>
-    <div class="grid-overlay"></div>
-
-    <div class="chaotic-lines-bg">
-        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="-10%" y1="20%" x2="110%" y2="85%" stroke="#ffffff" stroke-width="2" opacity="0.4" />
-            <line x1="85%" y1="-10%" x2="15%" y2="110%" stroke="#ffffff" stroke-width="1.5" opacity="0.3" />
-            <line x1="45%" y1="-20%" x2="55%" y2="120%" stroke="#ffffff" stroke-width="1" stroke-dasharray="15 10" opacity="0.2" />
-            
-            <path d="M -50,150 L 300,80 L 450,550 L 900,250 L 1150,700" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.35" />
-            <path d="M -20,800 L 250,750 L 550,950 L 900,550 L 1050,900" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.25" />
-            <path d="M 150,1050 L 350,600 L 650,300 L 850,-50" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.15" />
-            <path d="M 100,500 L 400,600 L 600,400 L 1000,500" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-dasharray="5 5" opacity="0.4" />
-
-            <path d="M 50,-50 L 200,400 L 750,500 L 1050,150" fill="none" stroke="var(--acid-green)" stroke-width="2" opacity="0.7" />
-            <path d="M 10%,100% L 35%,65% L 70%,80% L 95%,40%" fill="none" stroke="var(--acid-green)" stroke-width="1" opacity="0.5" />
-            
-            <circle cx="300" cy="80" r="5" fill="var(--acid-green)" opacity="0.8" />
-            <circle cx="450" cy="550" r="3" fill="#ffffff" opacity="0.9" />
-            <circle cx="900" cy="250" r="6" fill="none" stroke="var(--acid-green)" stroke-width="2" opacity="0.9" />
-            <circle cx="750" cy="500" r="2.5" fill="#ffffff" opacity="0.8" />
-            
-            <rect x="25%" y="85%" width="60" height="2" fill="var(--acid-green)" opacity="0.7" />
-            <rect x="80%" y="15%" width="2" height="50" fill="#ffffff" opacity="0.5" />
-            
-            <path d="M 450,550 L 500,500 M 900,250 L 850,300 M 200,400 L 150,450" fill="none" stroke="var(--acid-green)" stroke-width="2.5" opacity="0.9" />
-        </svg>
+    <!-- СЛОИ ЭКРАНА КОМПЬЮТЕРА (Эти дивы создают эффект Nightmode) -->
+    <div class="video-container">
+        <video id="bgVideo" class="video-bg" autoplay loop muted playsinline>
+            <source src="lugensy fest trailer (1).mp4" type="video/mp4">
+        </video>
     </div>
+    
+    <div class="grid-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="crt-vignette"></div>
+    <div class="screen-flicker"></div>
 
     <section class="hero">
         <div class="hero-text">
-            <div class="hero-meta">SHOWCASE_2026</div>
+            <div class="hero-meta">САМЫЙ ХАОТИЧНЫЙ ФЕСТИВАЛЬ ЭТОГО ЛЕТА</div>
             <h1 class="hero-title">LUGENSYFEST</h1>
-            <p class="hero-desc">Первый молодежный EDM-фестиваль новой волны в СНГ, созданный для радикального преображения электронной сцены через эпатаж и эксперименты. Международный лейбл MIROIR MUSIC представляет масштабный концептуальный шоукейс, где ключевыми элементами становятся независимый звук и агрессивная визуальная эстетика.<br><br>31 ИЮЛЯ | КЛУБ "СВОБОДА"</p>
-            <div class="tc-widget-container">
+            <p class="hero-desc">
+                <strong>СНГ-СЦЕНЕ ДАВНО НУЖЕН РЕСТАРТ.</strong><br>
+                Бывшие фонк-исполнители
+возрождают русскую EDM-культуру.
+ 31 июля в клубе «Свобода» на протяжении 6 часов будет чистое мясо: плотный UKG, Drum & Bass и Bass House. Забирай тикет, пока не поздно.
+            <div class="buy-wrapper">
                 <a href="tickets.html" class="buy-btn">
-                    <span>КУПИТЬ БИЛЕТ</span>
+                    <span>ЗАБРАТЬ БИЛЕТ ЗА 1000₽</span>
                     <span>→</span>
                 </a>
+                <span class="price-note">*Тариф COMMUNITY (ограниченная партия)</span>
             </div>
         </div>
+        
         <div class="hero-image-container">
             <img src="афиша lugensy новый ник v1.png" alt="LUGENSYFEST Poster">
         </div>
@@ -419,8 +322,9 @@
     <section class="lineup">
         <div class="lineup-header">
             <h2 class="section-title">CHOOSE YOUR PATIENT</h2>
-            <span class="section-meta">ROSTER // TOTAL_15</span>
+            <span class="section-meta">ROSTER // TOTAL_14</span>
         </div>
+        
         <div class="roster-grid" id="roster"></div>
     </section>
 
@@ -436,20 +340,7 @@
         </div>
     </div>
 
+    <!-- ТВОЙ ФАЙЛ app.js -->
     <script src="app.js"></script>
-
-    <footer class="footer-terminal">
-        <div class="footer-content">
-            <div class="footer-left">
-                <span class="age-limit">16+</span>
-            </div>
-            <div class="footer-center">
-                <span>MIROIR MUSIC / ALL RIGHTS RESERVED</span>
-            </div>
-            <div class="footer-right">
-                <img src="Lugency_Black3x.svg" alt="LUGENSY LOGO" class="footer-logo">
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
