@@ -30,7 +30,6 @@
         .hero-title, .section-title, .artist-name, #modalName {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            /* Радуга убрана */
         }
 
         body {
@@ -152,16 +151,18 @@
         
         .price-note { font-size: 0.75rem; color: var(--acid-green); text-transform: uppercase; letter-spacing: 1px; text-shadow: var(--acid-glow); }
 
-        /* ПОСТЕР */
+        /* ПОСТЕР — ФИКС ЗДЕСЬ */
         .hero-image-container {
-            position: relative; z-index: 10; flex: 0 0 38%; max-width: 38%;
+            position: relative; z-index: 10; flex: 0 0 40%; max-width: 40%;
             background: var(--panel-bg); padding: 1.5rem; border: 1px solid var(--gray-border);
             backdrop-filter: blur(8px); box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
         }
 
         .hero-image-container img {
             width: 100%; height: auto; max-height: 75vh; object-fit: contain;
             filter: grayscale(100%) contrast(1.2); mix-blend-mode: screen;
+            display: block;
         }
 
         /* --- СЕТКА ЛАЙН-АПА --- */
@@ -209,10 +210,9 @@
             transition: transform 0.4s ease, filter 0.4s ease; mix-blend-mode: screen;
         }
 
-        /* ТОЛЬКО МОНОХРОМ ПРИ НАВЕДЕНИИ */
         .artist-card:hover .artist-img-placeholder img { 
             transform: scale(1.05); 
-            filter: grayscale(100%) contrast(1.3); /* Цвет не возвращается, только легкий контраст */
+            filter: grayscale(100%) contrast(1.3);
         }
 
         .card-footer { margin-top: 0.5rem; }
@@ -299,7 +299,6 @@
             <p class="hero-desc">
                 <strong>СНГ-СЦЕНЕ ДАВНО НУЖЕН РЕСТАРТ.</strong><br>
                 Бывшие фонк-исполнители возрождают русскую EDM-культуру. 31 июля в клубе «Свобода» на протяжении 6 часов будет самый драйвовый электронный перфоманс этого лета: плотный UKG, Drum & Bass и Bass House в сочетании с харизматичными фрешменами индустрии. Забирай тикет, пока не поздно.
-            <div class="buy-wrapper">
             </p>
             <div class="buy-wrapper">
                 <a href="tickets.html" class="buy-btn">
