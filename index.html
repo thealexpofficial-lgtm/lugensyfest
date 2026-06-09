@@ -17,11 +17,9 @@
             --acid-glow: 0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3);
             --dark-bg: #020202;
             --panel-bg: rgba(5, 6, 8, 0.65);
-            --gray-border: rgba(57, 255, 20, 0.15); /* Бордеры теперь слегка зеленые */
+            --gray-border: rgba(57, 255, 20, 0.15);
             --gray-text: #8e94a0;
             --light-text: #e0e0e0;
-            /* Эффект хроматической аберрации (RGB раздвоение) */
-            --aberration: 2px 0px 0px rgba(255,0,0,0.5), -2px 0px 0px rgba(0,255,255,0.5);
         }
 
         * {
@@ -29,11 +27,10 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Глобальное раздвоение каналов на заголовках */
         .hero-title, .section-title, .artist-name, #modalName {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            text-shadow: var(--aberration);
+            /* Радуга убрана */
         }
 
         body {
@@ -43,7 +40,7 @@
             position: relative;
         }
 
-        /* === 1. ВИДЕО ФОН (Еще темнее и контрастнее) === */
+        /* === 1. ВИДЕО ФОН === */
         .video-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -5; overflow: hidden; background-color: var(--dark-bg);
@@ -55,7 +52,7 @@
             pointer-events: none;
         }
 
-        /* === 2. ДВИЖУЩИЕСЯ СКАНЛАЙНЫ И ПИКСЕЛЬНАЯ СЕТКА === */
+        /* === 2. ДВИЖУЩИЕСЯ СКАНЛАЙНЫ И СЕТКА === */
         .grid-overlay {
             position: fixed; top: 0; left: 0; bottom: 0; right: 0;
             background-image: 
@@ -78,7 +75,7 @@
             100% { background-position: 0 100vh; }
         }
 
-        /* === 3. ВИНЬЕТКА CRT МОНИТОРА (Темные края) === */
+        /* === 3. ВИНЬЕТКА CRT МОНИТОРА === */
         .crt-vignette {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
@@ -86,7 +83,6 @@
             z-index: 9998; pointer-events: none;
         }
 
-        /* === 4. ЭФФЕКТ МЕРЦАНИЯ ЭКРАНА (Глитч) === */
         .screen-flicker {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(57, 255, 20, 0.02);
@@ -138,7 +134,6 @@
             text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
 
-        /* Кнопка с эффектом жесткого фосфора */
         .buy-wrapper { display: flex; flex-direction: column; gap: 12px; }
 
         .buy-btn {
@@ -214,7 +209,11 @@
             transition: transform 0.4s ease, filter 0.4s ease; mix-blend-mode: screen;
         }
 
-        .artist-card:hover .artist-img-placeholder img { transform: scale(1.05); filter: grayscale(0%) contrast(1.1); }
+        /* ТОЛЬКО МОНОХРОМ ПРИ НАВЕДЕНИИ */
+        .artist-card:hover .artist-img-placeholder img { 
+            transform: scale(1.05); 
+            filter: grayscale(100%) contrast(1.3); /* Цвет не возвращается, только легкий контраст */
+        }
 
         .card-footer { margin-top: 0.5rem; }
         .artist-name { font-size: 1.4rem; color: var(--light-text); text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 0.25rem; }
@@ -256,7 +255,6 @@
         }
     </style>
     
-    <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
         (function(m,e,t,r,i,k,a){
             m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -268,7 +266,6 @@
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/109698134" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     
-    <!-- Top.Mail.Ru counter -->
     <script type="text/javascript">
     var _tmr = window._tmr || (window._tmr = []);
     _tmr.push({id: "3771625", type: "pageView", start: (new Date()).getTime()});
@@ -284,10 +281,9 @@
 </head>
 <body>
 
-    <!-- СЛОИ ЭКРАНА КОМПЬЮТЕРА (Эти дивы создают эффект Nightmode) -->
     <div class="video-container">
         <video id="bgVideo" class="video-bg" autoplay loop muted playsinline>
-            <source src="lugensy fest trailer (1).mp4" type="video/mp4">
+            <source src="trailer.mp4" type="video/mp4">
         </video>
     </div>
     
@@ -302,9 +298,8 @@
             <h1 class="hero-title">LUGENSYFEST</h1>
             <p class="hero-desc">
                 <strong>СНГ-СЦЕНЕ ДАВНО НУЖЕН РЕСТАРТ.</strong><br>
-                Бывшие фонк-исполнители
-возрождают русскую EDM-культуру.
- 31 июля в клубе «Свобода» на протяжении 6 часов будет чистое мясо: плотный UKG, Drum & Bass и Bass House. Забирай тикет, пока не поздно.
+                Индустрия заплыла жиром и коммерцией. Мы выросли на грязном басу и пришли всё это сносить. 31 июля мы забираем клуб «Свобода» на 6 часов. Будет чистое мясо: плотный UKG, Drum & Bass и Bass House. В топку индустриальные стандарты и форматы. Никаких рандомных лиц. Только трушный андерграунд и свои люди на танцполе.
+            </p>
             <div class="buy-wrapper">
                 <a href="tickets.html" class="buy-btn">
                     <span>ЗАБРАТЬ БИЛЕТ ЗА 1000₽</span>
@@ -340,7 +335,6 @@
         </div>
     </div>
 
-    <!-- ТВОЙ ФАЙЛ app.js -->
     <script src="app.js"></script>
 </body>
 </html>
